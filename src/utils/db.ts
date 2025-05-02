@@ -26,7 +26,11 @@ if (DexieDBURL) {
     databaseUrl: DexieDBURL,
     requireAuth: false,
     customLoginGui: true,
-    nameSuffix: false
+    nameSuffix: false,
+    tryUseServiceWorker: false,
+    disableWebSocket: true,
+    disableEagerSync: true,
+    unsyncedTables: ['workspaces', 'dialogs', 'messages', 'assistants', 'artifacts', 'installedPluginsV2', 'reactives', 'avatarImages', 'items', 'providers']
   })
 }
 db.version(6).stores({
