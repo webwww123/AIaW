@@ -11,7 +11,8 @@ import { useSetTheme } from './composables/set-theme'
 // import { useSubscriptionNotify } from './composables/subscription-notify'
 import { onMounted } from 'vue'
 import { checkUpdate, ready } from './utils/update'
-import { useAccessPassword } from './composables/access-password'
+// 已禁用访问密码功能
+// import { useAccessPassword } from './composables/access-password'
 
 defineOptions({
   name: 'App'
@@ -30,10 +31,12 @@ router.afterEach(to => {
   }
 })
 
-const { ensureVerified } = useAccessPassword()
+// 已禁用访问密码功能
+// const { ensureVerified } = useAccessPassword()
 
 onMounted(async () => {
-  await ensureVerified()
+  // 已禁用访问密码功能
+  // await ensureVerified()
   ready()
   checkUpdate()
 })
