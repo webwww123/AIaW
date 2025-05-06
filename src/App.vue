@@ -10,6 +10,7 @@ import { useSetTheme } from './composables/set-theme'
 import { useSubscriptionNotify } from './composables/subscription-notify'
 import { onMounted } from 'vue'
 import { checkUpdate, ready } from './utils/update'
+import { useAccessPassword } from './composables/access-password'
 
 defineOptions({
   name: 'App'
@@ -27,7 +28,10 @@ router.afterEach(to => {
   }
 })
 
-onMounted(() => {
+const { ensureVerified } = useAccessPassword()
+
+onMounted(async () => {
+  await ensureVerified()
   ready()
   checkUpdate()
 })
