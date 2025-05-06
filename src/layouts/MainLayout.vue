@@ -101,6 +101,20 @@
             target="_blank"
           />
           <q-space />
+          <!-- 同步状态和手动同步按钮 -->
+          <q-btn
+            v-if="DexieDBURL && user?.isLoggedIn"
+            flat
+            dense
+            round
+            :icon="syncIcon"
+            :color="syncStatus === 'error' ? 'negative' : ''"
+            :loading="syncStatus === 'syncing'"
+            :title="syncTooltip"
+            @click="manualSync"
+          >
+            <q-tooltip>{{ syncTooltip }}</q-tooltip>
+          </q-btn>
           <dark-switch-btn />
           <q-btn
             flat
@@ -174,6 +188,11 @@ import { useI18n } from 'vue-i18n'
 import { useOpenLastWorkspace } from 'src/composables/open-last-workspace'
 import { IsWeb } from 'src/utils/platform-api'
 import { VueDraggable } from 'vue-draggable-plus'
+import { db } from 'src/utils/db'
+import { useObservable } from '@vueuse/rxjs'
+import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { format } from 'date-fns'
+import { zhCN, enUS } from 'date-fns/locale'
 
 defineOptions({
   name: 'MainLayout'
@@ -187,6 +206,111 @@ route.path === '/' && openLastWorkspace()
 
 const { t, locale } = useI18n()
 const $q = useQuasar()
+
+// 同步状态管理
+const user = DexieDBURL ? useObservable(db.cloud.currentUser) : null
+const syncStatus = ref('idle') // 'idle', 'syncing', 'success', 'error'
+const lastSyncTime = ref(null)
+
+// 同步图标
+const syncIcon = computed(() => {
+  switch (syncStatus.value) {
+    case 'success':
+      return 'sym_o_cloud_done'
+    case 'error':
+      return 'sym_o_cloud_off'
+    default:
+      return 'sym_o_cloud_sync'
+  }
+})
+
+// 同步提示文本
+const syncTooltip = computed(() => {
+  switch (syncStatus.value) {
+    case 'syncing':
+      return t('mainLayout.syncing')
+    case 'success':
+      return lastSyncTime.value
+        ? t('mainLayout.lastSynced', { time: formatTime(lastSyncTime.value) })
+        : t('mainLayout.syncSuccess')
+    case 'error':
+      return t('mainLayout.syncFailed')
+    default:
+      return t('mainLayout.syncNow')
+  }
+})
+
+// 格式化时间
+function formatTime(time) {
+  const dateLocale = locale.value.startsWith('zh') ? zhCN : enUS
+  return format(new Date(time), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
+}
+
+// 手动触发同步
+async function manualSync() {
+  if (syncStatus.value === 'syncing' || !DexieDBURL || !user.value?.isLoggedIn) return
+
+  try {
+    syncStatus.value = 'syncing'
+
+    // 尝试同步
+    await db.cloud.sync()
+
+    syncStatus.value = 'success'
+    lastSyncTime.value = new Date().toISOString()
+    $q.notify({
+      message: t('mainLayout.syncSuccess'),
+      color: 'positive',
+      timeout: 2000
+    })
+  } catch (error) {
+    console.error('Sync failed:', error)
+    syncStatus.value = 'error'
+
+    // 显示错误信息
+    const errorMessage = t('mainLayout.syncFailed')
+
+    $q.notify({
+      message: errorMessage,
+      color: 'negative',
+      timeout: 5000,
+      actions: [
+        {
+          label: '重新登录',
+          color: 'white',
+          handler: async () => {
+            try {
+              await db.cloud.logout()
+              await db.cloud.login()
+              // 登录后尝试再次同步
+              setTimeout(() => {
+                manualSync()
+              }, 1000)
+            } catch (e) {
+              console.error('Relogin failed:', e)
+            }
+          }
+        }
+      ]
+    })
+  }
+}
+
+// 监听同步状态变化
+onMounted(() => {
+  if (DexieDBURL) {
+    // 监听登录状态变化
+    watch(() => user?.value?.isLoggedIn, (isLoggedIn) => {
+      if (isLoggedIn) {
+        // 用户登录后尝试同步
+        setTimeout(() => {
+          manualSync()
+        }, 2000)
+      }
+    }, { immediate: true })
+  }
+})
+
 function notifyVersion() {
   $q.notify({
     message: `${t('mainLayout.currentVersion')}: ${version.version}`,

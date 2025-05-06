@@ -28,11 +28,20 @@ if (DexieDBURL) {
     customLoginGui: true,
     nameSuffix: false,
     tryUseServiceWorker: false,
-    disableWebSocket: true,
-    disableEagerSync: true,
+    disableWebSocket: false, // 启用 WebSocket 以支持实时同步
+    disableEagerSync: false, // 启用主动同步以确保数据及时同步
     // 确保所有表都可以同步，没有限制
     unsyncedTables: []
   })
+
+  // 设置定期手动同步
+  setInterval(() => {
+    if (db.cloud.currentUser.value?.isLoggedIn) {
+      db.cloud.sync().catch(error => {
+        console.warn('DexieCloud sync error:', error)
+      })
+    }
+  }, 30000) // 每30秒尝试同步一次
 }
 db.version(6).stores({
   workspaces: 'id, type, parentId',

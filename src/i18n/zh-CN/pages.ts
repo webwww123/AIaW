@@ -94,6 +94,12 @@ export default {
     currentVersion: '当前版本',
     changeLog: '更新日志',
     webVersion: '网页版',
-    localClient: '本地客户端'
+    localClient: '本地客户端',
+    syncStatus: '同步状态',
+    syncNow: '立即同步',
+    syncing: '同步中...',
+    syncSuccess: '同步成功',
+    syncFailed: '同步失败',
+    lastSynced: '上次同步: {time}'
   }
 }
