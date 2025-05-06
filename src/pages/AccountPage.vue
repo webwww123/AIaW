@@ -43,7 +43,6 @@
           <q-item-section>
             <q-item-label caption>
               {{ $t('accountPage.cloudSyncDescription') }}
-              <span v-if="SyncServicePrice">{{ $t('accountPage.cloudSyncPrice', { priceCNY: SyncServicePrice, priceUSD: SyncServicePriceUSD }) }}</span>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -57,43 +56,11 @@
             </q-item-label>
           </q-item-section>
         </q-item>
-        <q-item v-if="user.license.type === 'eval'">
-          <q-item-section>
-            <q-item-label>
-              {{ $t('accountPage.evalLabel') }}
-            </q-item-label>
-            <q-item-label caption>
-              {{ $t('accountPage.evalDaysLeft', { days: user.license.evalDaysLeft }) }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              v-if="BudgetBaseURL"
-              unelevated
-              :label="$t('accountPage.subscribeButton')"
-              bg-pri-c
-              text-on-pri-c
-              @click="subscribeDialog"
-            />
-          </q-item-section>
-        </q-item>
-        <q-item v-else-if="user.license.type === 'prod'">
+        <q-item>
           <q-item-section>
             <q-item-label>
               {{ $t('accountPage.subscribedLabel') }}
             </q-item-label>
-            <q-item-label caption>
-              {{ $t('accountPage.validUntil', { date: user.license.validUntil.toLocaleString() }) }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              unelevated
-              bg-pri-c
-              text-on-pri-c
-              :label="$t('accountPage.renewButton')"
-              @click="subscribeDialog"
-            />
           </q-item-section>
         </q-item>
         <template v-if="LitellmBaseURL">
@@ -201,8 +168,7 @@ import { useUiStateStore } from 'src/stores/ui-state'
 import { useObservable } from '@vueuse/rxjs'
 import { db } from 'src/utils/db'
 import { useQuasar } from 'quasar'
-import SubscribeDialog from 'src/components/SubscribeDialog.vue'
-import { BudgetBaseURL, LitellmBaseURL, SyncServicePrice, SyncServicePriceUSD } from 'src/utils/config'
+import { BudgetBaseURL, LitellmBaseURL } from 'src/utils/config'
 import TopupDialog from 'src/components/TopupDialog.vue'
 import { useRouter } from 'vue-router'
 import PayDialog from 'src/components/PayDialog.vue'
@@ -233,18 +199,7 @@ const licenseStatus = computed(() => {
 const uiStateStore = useUiStateStore()
 
 const $q = useQuasar()
-function subscribeDialog() {
-  $q.dialog({
-    component: SubscribeDialog
-  }).onOk(res => {
-    window.open(res.payUrl, '_blank')
-    $q.dialog({
-      component: PayDialog
-    }).onOk(() => {
-      db.cloud.sync()
-    })
-  })
-}
+// 已移除订阅相关功能
 function topupDialog() {
   $q.dialog({
     component: TopupDialog

@@ -6,12 +6,11 @@ export default {
     cloudSyncHeader: '云同步',
     cloudSyncDescription:
       '跨设备实时云同步服务，能够同步工作区、对话、助手、设置、插件等所有数据。',
-    cloudSyncPrice: '价格为 {priceCNY}元/月',
     statusLabel: '状态',
     evalLabel: '试用中',
     evalDaysLeft: '剩余试用天数：{days}',
     subscribeButton: '订阅',
-    subscribedLabel: '已订阅',
+    subscribedLabel: '已启用',
     validUntil: '有效期至 {date}',
     renewButton: '续订',
     modelServicesHeader: '模型服务',

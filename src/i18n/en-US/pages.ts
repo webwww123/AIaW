@@ -6,12 +6,11 @@ export default {
     cloudSyncHeader: 'Cloud Sync',
     cloudSyncDescription:
       'Real-time cloud synchronization service across devices, which can synchronize all data such as workspaces, conversations, assistants, settings, and plugins.',
-    cloudSyncPrice: 'Price is USD $ {priceUSD} /month',
     statusLabel: 'Status',
     evalLabel: 'Trial',
     evalDaysLeft: 'Remaining trial days: {days}',
     subscribeButton: 'Subscribe',
-    subscribedLabel: 'Subscribed',
+    subscribedLabel: 'Enabled',
     validUntil: 'Valid until {date}',
     renewButton: 'Renew',
     modelServicesHeader: 'Model Services',

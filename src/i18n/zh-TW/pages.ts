@@ -6,12 +6,11 @@ export default {
     cloudSyncHeader: '雲同步',
     cloudSyncDescription:
       '跨裝置即時雲同步服務，能夠同步工作區、對話、助手、設定、插件等所有資料。',
-    cloudSyncPrice: '價格為 USD $ {priceUSD}/月',
     statusLabel: '狀態',
     evalLabel: '試用中',
     evalDaysLeft: '剩餘試用天數：{days}',
     subscribeButton: '訂閱',
-    subscribedLabel: '已訂閱',
+    subscribedLabel: '已啟用',
     validUntil: '有效期至 {date}',
     renewButton: '續訂',
     modelServicesHeader: '模型服務',
