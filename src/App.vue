@@ -7,7 +7,8 @@ import { useRouter } from 'vue-router'
 import { useFirstVisit } from './composables/first-visit'
 import { useLoginDialogs } from './composables/login-dialogs'
 import { useSetTheme } from './composables/set-theme'
-import { useSubscriptionNotify } from './composables/subscription-notify'
+// 已禁用订阅通知
+// import { useSubscriptionNotify } from './composables/subscription-notify'
 import { onMounted } from 'vue'
 import { checkUpdate, ready } from './utils/update'
 import { useAccessPassword } from './composables/access-password'
@@ -19,7 +20,8 @@ defineOptions({
 useSetTheme()
 useLoginDialogs()
 useFirstVisit()
-useSubscriptionNotify()
+// 已禁用订阅通知
+// useSubscriptionNotify()
 
 const router = useRouter()
 router.afterEach(to => {

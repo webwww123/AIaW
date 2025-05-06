@@ -30,7 +30,8 @@ if (DexieDBURL) {
     tryUseServiceWorker: false,
     disableWebSocket: true,
     disableEagerSync: true,
-    unsyncedTables: ['workspaces', 'dialogs', 'messages', 'assistants', 'artifacts', 'installedPluginsV2', 'reactives', 'avatarImages', 'items', 'providers']
+    // 确保所有表都可以同步，没有限制
+    unsyncedTables: []
   })
 }
 db.version(6).stores({

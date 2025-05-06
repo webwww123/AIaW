@@ -189,12 +189,8 @@ db.on('ready', () => {
   }
 })
 const licenseStatus = computed(() => {
-  switch (user.value.license.status) {
-    case 'ok': return t('accountPage.licenseOk')
-    case 'expired': return t('accountPage.licenseExpired')
-    case 'deactivated': return t('accountPage.licenseDeactivated')
-    default: return t('accountPage.licenseUnknown')
-  }
+  // 始终返回"已启用"状态
+  return t('accountPage.licenseOk')
 })
 const uiStateStore = useUiStateStore()
 
