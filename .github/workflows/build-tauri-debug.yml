@@ -72,6 +72,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 3
+        with:
           name: tauri-debug-${{ matrix.id }}
           path: |
             src-tauri/target/debug/bundle/*/*.exe
