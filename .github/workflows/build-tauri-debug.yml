@@ -82,4 +82,4 @@ jobs:
             src-tauri/target/debug/bundle/*/*.deb
             src-tauri/target/debug/bundle/*/*.AppImage
             src-tauri/target/*/debug/bundle/dmg/*.dmg
-          retention-days: 5
+          retention-days: 3
